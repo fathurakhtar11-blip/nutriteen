@@ -1,0 +1,277 @@
+
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NutriTeen - Sahabat Gizi Remaja</title>
+
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <header class="navbar">
+    <a href="#" class="logo">Nutri<span>Teen</span></a>
+
+    <nav id="main-nav" class="hidden">
+      <button data-page="dashboard">Beranda</button>
+      <button data-page="nutrition">Catat Makanan</button>
+      <button data-page="habits">Kebiasaan</button>
+      <button data-page="education">Edukasi</button>
+      <button id="logout-btn" class="btn-outline">Keluar</button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Halaman login dan daftar -->
+    <section id="auth-page" class="auth-layout">
+      <div class="hero">
+        <span class="eyebrow">SAHABAT GIZI REMAJA</span>
+        <h1>Mulai kebiasaan sehatmu bersama <span>NutriTeen.</span></h1>
+        <p>
+          Kenali kebutuhan gizimu, catat makanan, dan bangun kebiasaan
+          sehat sedikit demi sedikit.
+        </p>
+
+        <div class="hero-note">
+          <span>🌱</span>
+          <div>
+            <strong>Langkah kecil, perubahan berarti.</strong>
+            <p>Belajar menjaga kesehatan dengan cara yang lebih mudah.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="auth-card">
+        <div class="auth-tabs">
+          <button id="show-login" class="active">Masuk</button>
+          <button id="show-register">Daftar</button>
+        </div>
+
+        <form id="login-form">
+          <h2>Selamat datang!</h2>
+          <p>Masuk untuk melanjutkan perjalanan sehatmu.</p>
+
+          <label for="login-email">Email</label>
+          <input id="login-email" type="email" placeholder="nama@email.com" required>
+
+          <label for="login-password">Kata sandi</label>
+          <input id="login-password" type="password" placeholder="Masukkan kata sandi" required>
+
+          <button type="submit" class="btn-primary">Masuk ke akun</button>
+        </form>
+
+        <form id="register-form" class="hidden">
+          <h2>Buat akun baru</h2>
+          <p>Daftar untuk mulai menggunakan NutriTeen.</p>
+
+          <label for="register-name">Nama</label>
+          <input id="register-name" type="text" placeholder="Nama kamu" required>
+
+          <label for="register-email">Email</label>
+          <input id="register-email" type="email" placeholder="nama@email.com" required>
+
+          <label for="register-password">Kata sandi</label>
+          <input id="register-password" type="password" minlength="6" placeholder="Minimal 6 karakter" required>
+
+          <button type="submit" class="btn-primary">Buat akun</button>
+        </form>
+
+        <p id="auth-message" class="message" role="status"></p>
+      </div>
+    </section>
+
+    <!-- Area utama setelah login -->
+    <section id="app-page" class="hidden">
+      <div class="welcome">
+        <div>
+          <span class="eyebrow">RUANG SEHATMU</span>
+          <h1>Hai, <span id="user-name">Teman</span>! 👋</h1>
+          <p>Yuk, lihat perkembangan dan kebiasaan sehatmu hari ini.</p>
+        </div>
+        <span class="date-label" id="today-label"></span>
+      </div>
+
+      <section id="dashboard-page" class="page-section">
+        <div class="section-heading">
+          <h2>Ringkasan hari ini</h2>
+          <p>Catat kebiasaanmu agar lebih mudah memantaunya.</p>
+        </div>
+
+        <div class="stats-grid">
+          <article class="stat-card">
+            <span class="stat-icon">🍽️</span>
+            <p>Makanan dicatat</p>
+            <h3 id="stat-meals">0</h3>
+            <small>Catatan hari ini</small>
+          </article>
+
+          <article class="stat-card">
+            <span class="stat-icon">💧</span>
+            <p>Air putih</p>
+            <h3 id="stat-water">0 gelas</h3>
+            <small>Target pribadi harian</small>
+          </article>
+
+          <article class="stat-card">
+            <span class="stat-icon">🏃</span>
+            <p>Aktivitas</p>
+            <h3 id="stat-activity">0 menit</h3>
+            <small>Aktivitas hari ini</small>
+          </article>
+        </div>
+
+        <div class="content-grid">
+          <article class="panel">
+            <div class="panel-heading">
+              <div>
+                <h3>Profil gizi</h3>
+                <p>Informasi dasar untuk catatanmu.</p>
+              </div>
+              <span>🌿</span>
+            </div>
+
+            <form id="profile-form">
+              <label for="profile-name">Nama</label>
+              <input id="profile-name" type="text" required>
+
+              <label for="birth-date">Tanggal lahir</label>
+              <input id="birth-date" type="date" required>
+
+              <label for="sex">Jenis kelamin untuk referensi pertumbuhan</label>
+              <select id="sex" required>
+                <option value="">Pilih</option>
+                <option value="male">Laki-laki</option>
+                <option value="female">Perempuan</option>
+              </select>
+
+              <div class="two-columns">
+                <div>
+                  <label for="height">Tinggi (cm)</label>
+                  <input id="height" type="number" min="50" max="250" step="0.1" required>
+                </div>
+                <div>
+                  <label for="weight">Berat (kg)</label>
+                  <input id="weight" type="number" min="10" max="200" step="0.1" required>
+                </div>
+              </div>
+
+              <label for="activity-level">Aktivitas sehari-hari</label>
+              <select id="activity-level">
+                <option value="light">Ringan</option>
+                <option value="moderate">Sedang</option>
+                <option value="active">Aktif</option>
+              </select>
+
+              <button type="submit" class="btn-primary">Simpan profil</button>
+              <p id="profile-message" class="message" role="status"></p>
+            </form>
+          </article>
+
+          <article class="panel">
+            <div class="panel-heading">
+              <div>
+                <h3>Catatan gizi</h3>
+                <p>Ringkasan informasi yang kamu simpan.</p>
+              </div>
+              <span>📊</span>
+            </div>
+
+            <div id="nutrition-summary" class="empty-state">
+              <span>🥗</span>
+              <p>Lengkapi profil untuk mulai melihat ringkasan gizi.</p>
+            </div>
+
+            <p class="disclaimer">
+              Informasi NutriTeen bersifat edukasi, bukan diagnosis atau
+              pengganti saran tenaga kesehatan.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section id="nutrition-page" class="page-section hidden">
+        <div class="section-heading">
+          <h2>Catat makanan 🍎</h2>
+          <p>Simpan makanan yang kamu konsumsi hari ini.</p>
+        </div>
+
+        <div class="content-grid">
+          <article class="panel">
+            <h3>Tambah catatan makanan</h3>
+            <form id="meal-form">
+              <label for="food-name">Nama makanan</label>
+              <input id="food-name" type="text" placeholder="Contoh: nasi dan telur" required>
+
+              <label for="food-category">Kategori</label>
+              <select id="food-category" required>
+                <option value="Makanan pokok">Makanan pokok</option>
+                <option value="Protein">Protein</option>
+                <option value="Sayur">Sayur</option>
+                <option value="Buah">Buah</option>
+                <option value="Lainnya">Lainnya</option>
+              </select>
+
+              <label for="food-serving">Porsi</label>
+              <input id="food-serving" type="text" placeholder="Contoh: 1 piring" required>
+
+              <label for="food-quantity">Jumlah porsi</label>
+              <input id="food-quantity" type="number" min="0.1" step="0.1" value="1" required>
+
+              <button type="submit" class="btn-primary">Simpan makanan</button>
+              <p id="meal-message" class="message" role="status"></p>
+            </form>
+          </article>
+
+          <article class="panel">
+            <h3>Riwayat makanan hari ini</h3>
+            <div id="meal-list" class="item-list"></div>
+          </article>
+        </div>
+      </section>
+
+      <section id="habits-page" class="page-section hidden">
+        <div class="section-heading">
+          <h2>Kebiasaan sehat 🌱</h2>
+          <p>Catat kebiasaanmu tanpa perlu mengejar kesempurnaan.</p>
+        </div>
+
+        <article class="panel narrow-panel">
+          <form id="habit-form">
+            <label for="water">Air putih (gelas)</label>
+            <input id="water" type="number" min="0" max="30" value="0" required>
+
+            <label for="vegetables">Porsi sayur dan buah</label>
+            <input id="vegetables" type="number" min="0" max="30" value="0" required>
+
+            <label for="activity-minutes">Aktivitas fisik (menit)</label>
+            <input id="activity-minutes" type="number" min="0" max="1440" value="0" required>
+
+            <label class="checkbox-label">
+              <input id="varied-meals" type="checkbox">
+              Hari ini saya berusaha makan beragam
+            </label>
+
+            <button type="submit" class="btn-primary">Simpan kebiasaan</button>
+            <p id="habit-message" class="message" role="status"></p>
+          </form>
+        </article>
+      </section>
+
+      <section id="education-page" class="page-section hidden">
+        <div class="section-heading">
+          <h2>Ruang edukasi 📚</h2>
+          <p>Pelajari dasar gizi dan kebiasaan sehat remaja.</p>
+        </div>
+        <div id="education-list" class="education-grid"></div>
+      </section>
+    </section>
+  </main>
+
+  <footer>
+    <p>NutriTeen © 2026 · Belajar gizi, bangun kebiasaan sehat.</p>
+  </footer>
+</body>
+</html>
